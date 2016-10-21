@@ -37,7 +37,7 @@ class ParallelCode:
 
         for i in range(len(self.loop_bounds)):
             x = abs(self.dependence_vector[self.loop_bounds[i][0]])
-            temp = math.ceil(self.loop_bounds[i][2]/x)
+            temp = math.ceil((self.loop_bounds[i][2] - self.loop_bounds[i][1] + 1) / x)
             partition_no.append(temp)
 
         return min(partition_no)
