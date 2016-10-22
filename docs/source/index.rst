@@ -8,9 +8,9 @@ Welcome to Cycle-Shrinking's documentation!
 
 Cycle Shrinking is used to parallelise the serial code which has cyclic data dependence
 
-********
-Contents
-********
+****
+CODE
+****
 
 .. toctree::
     :maxdepth: 2

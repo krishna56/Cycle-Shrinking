@@ -5,4 +5,5 @@ Cycle Shrinking Implementation
 .. toctree::
     :maxdepth: 3
 
-    constant-distance
+    vector-generation
+    parallel-code-generation

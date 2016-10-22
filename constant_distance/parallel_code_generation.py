@@ -1,15 +1,11 @@
 """
-    Generates c++ parallel code in OpenMP using cycle shrinking constant distance
-"""
-
-"""
-    Class ConstantDistance and functions imported from file const_dist
+    Generates c++ parallel code in OpenMP using cycle shrinking algorithm
 """
 
 import math
-from const_dist import ConstantDistance
-from const_dist import reading_input
-from const_dist import distributing_input_list
+from vector_generation import ConstantDistance
+from vector_generation import reading_input
+from vector_generation import distributing_input_list
 import sys
 
 class ParallelCode:
@@ -18,13 +14,10 @@ class ParallelCode:
        This class generates the c++ parallel code given the dependence distance vector
 
        Data Variables:
-           loop_bounds -> list containing list of index and its loop bounds
-           code_lines -> list containing lines for initialization and inner most loop code
-           dependence_vector -> dictionary containing dependence distance vector(value) with index as key
 
-        Member Functions:
-            partition_num -> returns no of partition required
-            generate_code -> generates the parallel code
+           - loop_bounds: list containing list of index and its loop bounds
+           - code_lines: list containing lines for initialization and inner most loop code
+           - dependence_vector: dictionary containing dependence distance vector(value) with index as (key)
     """
 
     def __init__(self, loop_bounds=[], dependence_vector={}, code_lines=[]):
@@ -33,6 +26,9 @@ class ParallelCode:
         self.dependence_vector = dependence_vector
 
     def partition_num(self):
+        """
+            Returns the minimum number of partition of iteration space
+        """
         partition_no=[]
 
         for i in range(len(self.loop_bounds)):
@@ -43,6 +39,9 @@ class ParallelCode:
         return min(partition_no)
 
     def generate_code(self, partition_no):
+        """
+            Prints the final parallel code to the screen
+        """
 
         initialization = []
         inner_most_lines = []

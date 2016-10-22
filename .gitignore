@@ -1,6 +1,8 @@
 build/
 result/
 
+*.docx
+
 *.aux
 *.log
 *.tex

@@ -12,15 +12,10 @@ class ConstantDistance:
         This class finds the dependence distance vector given all the loop inputs.
 
         Data variables:
-            m ->  No. of loop indexes
-            p ->  No. of reference pairs
-            pairs -> list containing the [index,co-efficient of that index,source distance,sink distance] for each reference pair
 
-        Member Functions:
-            data_dependence -> Returns a dictionary with (key,value) as (index num,list containing distance for each reference pair)
-            dependence_distance ->
-                Arguments -> data_dependence_vector from previous function
-                Return -> dictionary with (key,value) as (index, dependence distance)
+            - m: No. of loop indexes
+            - p: No. of reference pairs
+            - pairs: list containing the [index,co-efficient of that index,source distance,sink distance]
     """
 
     def __init__(self, m=0, p=0, pairs=[]):
@@ -29,6 +24,9 @@ class ConstantDistance:
         self.pairs = pairs
 
     def data_dependence(self):
+        """
+            Returns a dict as (index num,list containing distance for each reference pair)
+        """
         data_dependence_vector = {}
 
         for i in range(0,len(self.pairs),4):
@@ -41,6 +39,11 @@ class ConstantDistance:
         return data_dependence_vector
 
     def dependence_distance(self,data_dependence_vector):
+        """
+            Arguments: dict data_dependence_vector from data_dependence member
+
+            Return: dependence_distance_vector dict as (index, dependence_distance)
+        """
         dependence_distance_vector={}
 
         for k,v in data_dependence_vector.iteritems():
