@@ -6,4 +6,7 @@ result/
 *.tex
 *.pdf
 
+*.pyc
+*.cpp
+
 
