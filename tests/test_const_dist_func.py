@@ -27,7 +27,8 @@ class TestConstDistFile(unittest.TestCase):
         result = distributing_input_list(list_input_num)
         self.assertEqual(result , [0,[],0,[],[]])
 
-    def test_data_dependence(self):
+    d
+    f test_data_dependence(self):
         pass
 
 if  __name__ == '__main__' :
