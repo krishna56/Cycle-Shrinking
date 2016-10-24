@@ -2,6 +2,7 @@ build/
 result/
 
 *.docx
+*.odt
 
 *.aux
 *.log

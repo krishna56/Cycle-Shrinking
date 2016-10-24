@@ -3,9 +3,9 @@
 """
 import unittest
 import os
-from constant_distance.const_dist import reading_input
-from constant_distance.const_dist import distributing_input_list
-from constant_distance.const_dist import ConstantDistance
+from constant_distance.vector_generation import reading_input
+from constant_distance.vector_generation import distributing_input_list
+from constant_distance.vector_generation import ConstantDistance
 
 class TestConstDistFile(unittest.TestCase):
 
@@ -27,8 +27,10 @@ class TestConstDistFile(unittest.TestCase):
         result = distributing_input_list(list_input_num)
         self.assertEqual(result , [0,[],0,[],[]])
 
-    d
-    f test_data_dependence(self):
+    def test_data_dependence(self):
+        pass
+
+    def test_dependence_distance(self):
         pass
 
 if  __name__ == '__main__' :
