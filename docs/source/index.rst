@@ -17,7 +17,7 @@ CODE
 
     reference/index
 
-ndices and tables
+Indices and tables
 ==================
 
 * :ref:`genindex`

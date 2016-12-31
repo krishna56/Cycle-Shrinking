@@ -68,11 +68,11 @@ class ConstantDistance:
     last m lines : code
 """
 
-def reading_input():
+def reading_input(path):
     """
         Function for taking input from the file 'input' and storing it in list_input_num
     """
-    input_file = open("input",'r')
+    input_file = open(path,'r')
     list_input_num = []
 
     for line in input_file.readlines():
@@ -96,10 +96,12 @@ def distributing_input_list(list_input_num):
     p = int(list_input_num[3*m+1])
     pairs = list_input_num[3*m+2 : 3*m+2+4*p]
     code_lines = list_input_num[3*m+2+4*p : len(list_input_num)]
+
     return [m, loop_bounds, p, pairs, code_lines]
 
 if __name__ == '__main__':
 
+    path = "../input/input"
     list_input_num = reading_input()
     [m, loop_bounds, p, pairs, code_lines] = distributing_input_list(list_input_num)
 
@@ -112,4 +114,5 @@ if __name__ == '__main__':
     print 'Number of reference pairs:',cd.p
     print 'List of pairs:',cd.pairs
     print 'Dependence distance vector:',dependence_distance_vector
+
 

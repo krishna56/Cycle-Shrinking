@@ -1,5 +1,6 @@
 build/
 result/
+input/
 
 *.docx
 *.odt
@@ -11,5 +12,7 @@ result/
 
 *.pyc
 *.cpp
+
+*.out
 
 
