@@ -45,20 +45,28 @@ class ParallelCode:
             Prints the final parallel code to the screen
         """
 
+        # Include statements
         print "#include<iostream>"
         print ""
         print "using namespace std;"
         print ""
+
+        # Main function starts here
         print "int main()"
         print "{"
 
+        # Initializing matrix using initialization file
         initialization = open("../input/initialization",'r')
         for lines in initialization.readlines():
             print "    " + str(lines.strip())
 
         print ""
+
+        # Initializing the length
         print "    int length=" + str(len(self.loop_bounds)) + ";"
         print ""
+
+        # Initializing the lower_loop_bound
         print "    int lower_loop_bounds[] = {"
 
         for i in range(len(self.loop_bounds)):
@@ -67,6 +75,7 @@ class ParallelCode:
         print "    };"
         print ""
 
+        # Initializing loop_bounds
         print "    int loop_bounds[] = {"
 
         for i in range(len(self.loop_bounds)):
@@ -74,43 +83,55 @@ class ParallelCode:
 
         print "    };"
         print ""
+
+        # Initializing the dependence distance
         print "    int dep_dist[] = {"
 
         for i in range(len(self.loop_bounds)):
             print "    " + str(self.dependence_vector[self.loop_bounds[i][0]]) + ","
 
         print "    };"
-
         print ""
+
+        # Initializing the loop index
         print "    int "
 
         for i in range(len(self.loop_bounds)-1):
             print "    " + str(self.loop_bounds[i][0]) + ","
 
         print "    " + str(self.loop_bounds[len(self.loop_bounds)-1][0]) + ";"
-
-
         print ""
+
+        # Initializing the partition number
         print "    int partition_no=" + str(partition_no) + ";"
         print ""
+
+        # Main loop starts here
         print "    for(int part=1; part <= partition_no; part++)"
         print "    {"
+
+        # Initializing the length
         print "        int start[length];"
         print ""
+
+        # Loop for calculation of start[h] based on dependence distance
         print "        #pragma omp parallel for shared(dep_dist)"
         print "        for(int h=0; h<length; h++)"
         print "        {"
-        print "            if (dep_dist[h] >= 0) { start[h] = lower_loop_bounds[h] +(part-1)*dep_dist[h]; } "
-        print "            else { start[h] = loop_bounds[h]-(part-1)*dep_dist[h]; } "
+        print "            if (dep_dist[h] > 0) { start[h] = lower_loop_bounds[h] +(part-1)*dep_dist[h]; } "
+        print "            else if (dep_dist[h] == 0) { start[h] = lower_loop_bounds[h];}"
+        print "            else { start[h] = loop_bounds[h] + (part-1)*dep_dist[h]; } "
         print "        }"
         print ""
 
-
+        # Main parallel portion starts here
         for i in range(len(self.loop_bounds)):
             if (self.dependence_vector[self.loop_bounds[i][0]] != 0):
+
                 temp = ""
                 st = ""
 
+                # Below two for loops are creating string(st) to be put in pragma statement
                 for j in range(len(self.loop_bounds)):
                     if (self.loop_bounds[i][0] != self.loop_bounds[j][0]):
                         temp = temp + self.loop_bounds[j][0]
@@ -130,21 +151,27 @@ class ParallelCode:
                     for k in range(i):
                         a = self.loop_bounds[k][0]
                         b = str(k)
-                        if (self.loop_bounds[k][2] > 0):
+                        if (self.dependence_vector[a] > 0):
                             print "           for(" + a + "=start[" + b + "]+dep_dist[" + b + "]; " + a + "<=loop_bounds[" + b + "]; " + a + "++)"
                             print "           {"
+                        elif (self.dependence_vector[a] == 0):
+                            print "           for(" + a + "=start[" + b + "]; "+ a + " <= loop_bounds[" + b + "]; " + a + "++)"
+                            print "           {"
                         else:
-                            print "           for(" + a + "=start[" + b + "]+ dep_dist[" + b + "]; " + a + ">= 1; " + a + "--)"
+                            print "           for(" + a + "=start[" + b + "]+ dep_dist[" + b + "]; " + a + ">= lower_loop_bounds[" + b + "];" + a + "--)"
                             print "           {"
 
                     for m in range(i+1, len(self.loop_bounds)):
                         a = self.loop_bounds[m][0]
                         b = str(m)
-                        if (self.loop_bounds[m][2] > 0):
+                        if (self.dependence_vector[a] > 0):
                             print "           for(" + a + "=start[" + b + "]; " + a + "<=loop_bounds[" + b + "]; " + a + "++)"
                             print "           {"
+                        elif (self.dependence_vector[a] == 0):
+                            print "           for(" + a + "=start[" + b + "]; "+ a + " <= loop_bounds[" + b + "]; " + a + "++)"
+                            print "           {"
                         else:
-                            print "           for(" + a + "=start[" + b + "]; " + a + ">= 1; " + a + "--)"
+                            print "           for(" + a + "=start[" + b + "];" + a + ">= lower_loop_bounds[" + b + "]; " + a + "--)"
                             print "           {"
 
                     for l in range(len(self.code_lines)):
@@ -159,27 +186,33 @@ class ParallelCode:
                     print "        }"
 
                 elif (self.dependence_vector[x] < 0):
-                    print "        for(" + x  + "=start[" + y + "]; " + x + "<= max(start[" + y + "]+dep_dist[" + y + "]+1,1); " + x + "--)"
+                    print "        for(" + x  + "=start[" + y + "]; " + x + ">= max(start[" + y + "]+dep_dist[" + y + "]+1,lower_loop_bounds[" + b +"]); " + x + "--)"
                     print "        {"
 
                     for k in range(i):
                         a = self.loop_bounds[k][0]
                         b = str(k)
-                        if (self.loop_bounds[k][2] > 0):
+                        if (self.dependence_vector[a] > 0):
                             print "           for(" + a + "=start[" + b + "]+dep_dist[" + b + "]; " + a + "<=loop_bounds[" + b + "]; " + a + "++)"
                             print "           {"
+                        elif (self.dependence_vector[a] == 0):
+                            print "           for(" + a + "=start[" + b + "]; "+ a + " <= loop_bounds[" + b + "]; " + a + "++)"
+                            print "           {"
                         else:
-                            print "           for(" + a + "=start[" + b + "]+ dep_dist[" + b + "]; " + a + ">= 1; " + a + "--)"
+                            print "           for(" + a + "=start[" + b + "]+ dep_dist[" + b + "]; " + a + ">= lower_loop_bounds[" + b + "];" + a + "--)"
                             print "           {"
 
                     for m in range(i+1, len(self.loop_bounds)):
                         a = self.loop_bounds[m][0]
                         b = str(m)
-                        if (self.loop_bounds[m][2] > 0):
+                        if (self.dependence_vector[a] > 0):
                             print "           for(" + a + "=start[" + b + "]; " + a + "<=loop_bounds[" + b + "]; " + a + "++)"
                             print "           {"
+                        elif (self.dependence_vector[a] == 0):
+                            print "           for(" + a + "=start[" + b + "]; "+ a + " <= loop_bounds[" + b + "]; " + a + "++)"
+                            print "           {"
                         else:
-                            print "           for(" + a + "=start[" + b + "]; " + a + ">= 1; " + a + "--)"
+                            print "           for(" + a + "=start[" + b + "]; " + a + ">= lower_loop_bounds[" + b + "];" + a + "--)"
                             print "           {"
 
                     for l in range(len(self.code_lines)):
@@ -196,12 +229,15 @@ class ParallelCode:
         print "    }"
         print ""
 
+        # Print lines from the print_lines file for checking the output
         print_lines = open("../input/print_lines",'r')
 
         for lines in print_lines.readlines():
             print "    " + str(lines.rstrip())
 
         print ""
+
+        # End of main function
         print "    return 0;"
         print ""
         print "}"
