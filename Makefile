@@ -23,7 +23,7 @@ cleanall: tests build clean
 	cd result; rm -f a.out parallel_code_result
 
 tests: install build
-	cd result; g++ parallel_code.cpp; ./a.out > parallel_code_result
+	cd result; g++ -fopenmp parallel_code.cpp; ./a.out > parallel_code_result
 	cd input; g++ serial_code.cpp; ./a.out > serial_code_result
 	cd tests; nosetests
 

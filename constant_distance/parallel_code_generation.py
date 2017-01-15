@@ -47,6 +47,8 @@ class ParallelCode:
 
         # Include statements
         print "#include<iostream>"
+        print "#include<ctime>"
+        print "#include<vector>"
         print ""
         print "using namespace std;"
         print ""
@@ -58,7 +60,7 @@ class ParallelCode:
         # Initializing matrix using initialization file
         initialization = open("../input/initialization",'r')
         for lines in initialization.readlines():
-            print "    " + str(lines.strip())
+            print str(lines.rstrip())
 
         print ""
 
@@ -104,6 +106,10 @@ class ParallelCode:
 
         # Initializing the partition number
         print "    int partition_no=" + str(partition_no) + ";"
+        print ""
+
+        # For time calculation
+        print "    int start_s = clock();"
         print ""
 
         # Main loop starts here
@@ -186,7 +192,7 @@ class ParallelCode:
                     print "        }"
 
                 elif (self.dependence_vector[x] < 0):
-                    print "        for(" + x  + "=start[" + y + "]; " + x + ">= max(start[" + y + "]+dep_dist[" + y + "]+1,lower_loop_bounds[" + b +"]); " + x + "--)"
+                    print "        for(" + x  + "=start[" + y + "]; " + x + ">= max(start[" + y + "]+dep_dist[" + y + "]+1,lower_loop_bounds[" + y +"]); " + x + "--)"
                     print "        {"
 
                     for k in range(i):
@@ -228,6 +234,12 @@ class ParallelCode:
 
         print "    }"
         print ""
+
+        # For time calculation
+        print "    int stop_s = clock();"
+        print "    double time = (stop_s - start_s)/ double(CLOCKS_PER_SEC); "
+        print "    //cout << time << endl;"
+        print " "
 
         # Print lines from the print_lines file for checking the output
         print_lines = open("../input/print_lines",'r')
